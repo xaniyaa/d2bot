@@ -1,7 +1,9 @@
 # file with all for logs for more clear text in main file
-import discord
 from datetime import datetime
+
 from pytz import timezone
+
+import discord
 
 
 def Kyiv_time():  # returns UTC:+3 time
@@ -13,9 +15,7 @@ def Kyiv_time():  # returns UTC:+3 time
 
 def LogEdit(message_before, message_after):  # returns embed for Edit log
     embed = discord.Embed(
-        title="{} edited his message in {} channel".format(
-            str(message_before.author), str(message_before.channel.name)
-        ),
+        title=f"{message_before.author} edited his message in {message_before.channel.name} channel",
         description="",
         color=discord.Color.from_rgb(255, 0, 100),
     )

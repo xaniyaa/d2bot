@@ -1,66 +1,73 @@
 import io
 
 import aiohttp as aiohttp
-import discord
-from discord.ext import tasks, commands
-import embeds
-import requests
-from PIL import Image
+import helpers
+from apikeys import TOKEN
+from loguru import logger
 
-from apikeys import *
+import discord
+from config import settings
+from discord.ext import commands
 
 client = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 
 
 @client.event
 async def onready():
-    print("The bot is working now")
-    print("-------------------------------------------")
+    logger.info("The bot is working now")
+    logger.info("-------------------------------------------")
 
 
 @client.event
 async def on_message_delete(message):  # on deleting message sends embed with info in log channel
     async for entry in message.guild.audit_logs(limit=1, action=discord.AuditLogAction.message_delete):
         deleter = entry.user
-    channel = client.get_channel(1125820992304984064)  # log channel id
-    await channel.send(embed=embeds.LogDelete(message, deleter))
+    channel = client.get_channel(settings.EDIT_NOTIFICATIONS_CHANNEL_ID)  # log channel id
+    await channel.send(embed=helpers.LogDelete(message, deleter))
 
     if len(str(message.content)) >= 2000:
-        embeds.LogTxtDelete(message)
+        # TODO: change to Bytes.IO
+        helpers.LogTxtDelete(message)
         with open("message.txt", "rb") as file:
             await channel.send(file=discord.File(file, "message.txt"))
 
     elif 2000 > len(str(message.content)) >= 256:
         await channel.send(str(message.content))
-        await channel.send(embed=embeds.SplitEmbed())
+        await channel.send(embed=helpers.SplitEmbed())
 
 
 @client.event
 async def on_message_edit(message_before, message_after):  # on edit message sends embed with info in log channel
-    channel = client.get_channel(1125820992304984064)
-    await channel.send(embed=embeds.LogEdit(message_before, message_after))
+    channel = client.get_channel(settings.EDIT_NOTIFICATIONS_CHANNEL_ID)
 
-    if len(str(message_before.content)) >= 2000 or len(str(message_after.content)) >= 2000:
-        embeds.LogTxtEdit(message_before, message_after)
+    is_message_too_big = len(str(message_before.content)) >= 2000 or len(str(message_after.content)) >= 2000
+
+    if is_message_too_big:
+        # if message > 2000
+        helpers.LogTxtEdit(message_before, message_after)
         with open("message.txt", "rb") as file:
             await channel.send(file=discord.File(file, "message.txt"))
 
     elif 2000 > len(str(message_before.content)) > 256 or 2000 > len(str(message_after.content)) > 256:
+        # if 2000 > message > 256
         await channel.send(str(message_before.content))
         embed = discord.Embed(title="To:")
         await channel.send(embed=embed)
         await channel.send(str(message_after.content))
-        await channel.send(embed=embeds.SplitEmbed())
+        await channel.send(embed=helpers.SplitEmbed())
+    else:
+        # if message < 256
+        await channel.send(embed=helpers.LogEdit(message_before, message_after))
 
 
 @client.event
 async def on_member_remove(member):
-    channel = client.get_channel(1125820992304984064)
-    await channel.send(embed=embeds.LeaveLog(member))
+    channel = client.get_channel(settings.EDIT_NOTIFICATIONS_CHANNEL_ID)
+    await channel.send(embed=helpers.LeaveLog(member))
 
 
 @client.command(description="Set the guild banner image")
-@commands.has_role(1126175427061371011)
+@commands.has_role(settings.PROGRAMMER_ROLE_ID)
 async def setbanner(ctx, url: str):
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as resp:
@@ -73,8 +80,9 @@ async def setbanner(ctx, url: str):
 
 @client.event
 async def on_member_join(member):
-    channel = client.get_channel(1125820992304984064)
-    await channel.send(embed=embeds.JoinLog(member))
+    channel = client.get_channel(settings.EDIT_NOTIFICATIONS_CHANNEL_ID)
+    await channel.send(embed=helpers.JoinLog(member))
 
 
-client.run(TOKEN)
+if __name__ == "__main__":
+    client.run(TOKEN)

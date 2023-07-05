@@ -2,3 +2,7 @@ apitokens.py
 **/__pycache__
 **/.venv
 *.env
+.idea
+venv/
+env/
+**.whl

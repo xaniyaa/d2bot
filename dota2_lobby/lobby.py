@@ -1,7 +1,7 @@
-from client import dota
-from client import client
 import logging
 import os
+
+from client import client, dota
 from dotenv import load_dotenv
 
 load_dotenv(dotenv_path="config/config.env")
