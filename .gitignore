@@ -1,0 +1,4 @@
+apitokens.py
+**/__pycache__
+**/.venv
+*.env
