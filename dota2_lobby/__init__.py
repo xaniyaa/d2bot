@@ -1,2 +1,1 @@
-from . import lobby
-from . import client
+from . import client, lobby

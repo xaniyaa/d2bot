@@ -1,6 +1,5 @@
-from steam.client import SteamClient
 from dota2.client import Dota2Client
-
+from steam.client import SteamClient
 
 # client = steam operations, dota = dota client operations
 client = SteamClient()

@@ -1,0 +1,14 @@
+FROM python:3.10-slim
+
+RUN apt-get update
+
+WORKDIR /code
+
+COPY poetry.lock poetry.lock
+COPY pyproject.toml pyproject.toml
+RUN pip install poetry
+RUN poetry install
+
+COPY Discord /code
+
+CMD ["python", "main.py"]
