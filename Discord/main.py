@@ -2,15 +2,14 @@ import io
 
 import aiohttp as aiohttp
 import helpers
-from apikeys import TOKEN
 from loguru import logger
 
 import discord
 from config import settings
 from discord.ext import commands
 
-client = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 
+client = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 
 @client.event
 async def onready():
