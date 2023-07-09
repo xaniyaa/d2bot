@@ -1,10 +1,13 @@
 import os
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 
+load_dotenv(find_dotenv())
 
-load_dotenv(dotenv_path='config/config.env')
+banner_folder_orig = os.path.join(os.path.dirname('settings.py'), '..', 'static', 'orig.gif')
+banner_folder_image = os.path.join(os.path.dirname('settings.py'), '..', 'static', 'image.gif')
 
-e = os.environ.get
-
-EDIT_NOTIFICATIONS_CHANNEL_ID = e("EDIT_NOTIFICATIONS_CHANNEL_ID", 1125820992304984064)
-PROGRAMMER_ROLE_ID = e("PROGRAMMER_ROLE_ID", 1126175427061371011)
+EDIT_NOTIFICATIONS_CHANNEL_ID = int(os.getenv("EDIT_NOTIFICATIONS_CHANNEL_ID"))
+BANNER_LOCATION = os.getenv("BANNER_LOCATION", banner_folder_orig)
+EDITED_BANNER_LOCATION = os.getenv("EDITED_BANNER_LOCATION", banner_folder_image)
+GUILD_ID = int(os.getenv("GUILD_ID"))
+DISCORD_API_TOKEN = os.getenv("DISCORD_API_TOKEN")
