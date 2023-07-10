@@ -1,10 +1,11 @@
 import os
-from dotenv import load_dotenv, find_dotenv
+
+from dotenv import find_dotenv, load_dotenv
 
 load_dotenv(find_dotenv())
 
-banner_folder_orig = os.path.join(os.path.dirname('settings.py'), '..', 'static', 'orig.gif')
-banner_folder_image = os.path.join(os.path.dirname('settings.py'), '..', 'static', 'image.gif')
+banner_folder_orig = os.path.join(os.path.dirname("settings.py"), "..", "static", "orig.gif")
+banner_folder_image = os.path.join(os.path.dirname("settings.py"), "..", "static", "image.gif")
 
 EDIT_NOTIFICATIONS_CHANNEL_ID = int(os.getenv("EDIT_NOTIFICATIONS_CHANNEL_ID"))
 BANNER_LOCATION = os.getenv("BANNER_LOCATION", banner_folder_orig)

@@ -4,9 +4,8 @@ import os
 from client import client, dota
 from dotenv import load_dotenv
 
-username = os.getenv("account_username")
-password = os.getenv("account_password")
-print(username, password)
+username = os.getenv("ACCOUNT_USERNAME")
+password = os.getenv("ACCOUNT_PASSWORD")
 
 
 # creates lobby and make bot join specs

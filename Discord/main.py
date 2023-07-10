@@ -1,9 +1,9 @@
 import helpers
 from loguru import logger
+
 import discord
 from config import settings
 from discord.ext import commands, tasks
-
 
 client = commands.Bot(command_prefix="!", intents=discord.Intents.all())
 
@@ -95,9 +95,9 @@ async def on_member_join(member):
 async def on_voice_state_update(member, before, after):
     if before.self_mute != after.self_mute:
         if after.self_mute:
-            logger.info('{} has been muted in {}'.format(member, helpers.Kyiv_time()))
+            logger.info("{} has been muted in {}".format(member, helpers.Kyiv_time()))
         else:
-            logger.info('{} has been unmuted in {}'.format(member, helpers.Kyiv_time()))
+            logger.info("{} has been unmuted in {}".format(member, helpers.Kyiv_time()))
 
 
 if __name__ == "__main__":
