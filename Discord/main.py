@@ -16,8 +16,8 @@ async def on_ready():
 
 
 @client.event
-async def on_message_delete(message):
-    # on deleting message sends embed with info in log channel
+async def on_message_delete(message: discord.Message):
+    """Отправляет discord.Embed при удалении сообщения в логи"""
     channel = client.get_channel(settings.EDIT_NOTIFICATIONS_CHANNEL_ID)  # log channel id
     await channel.send(embed=helpers.LogDelete(message))
     for attachment in message.attachments:
@@ -34,8 +34,8 @@ async def on_message_delete(message):
 
 
 @client.event
-async def on_message_edit(message_before, message_after):
-    # on edit message sends embed with info in log channel
+async def on_message_edit(message_before: discord.Message, message_after: discord.Message):
+    """Отправляет discord.Embed при изменении сообщения в логи"""
     if message_before.content != message_after.content:
         channel = client.get_channel(settings.EDIT_NOTIFICATIONS_CHANNEL_ID)
 
@@ -61,14 +61,14 @@ async def on_message_edit(message_before, message_after):
 
 @client.event
 async def on_member_remove(member):
-    # sends log on member join
+    """Логирует выходы пользователей на сервер"""
     channel = client.get_channel(settings.EDIT_NOTIFICATIONS_CHANNEL_ID)
     await channel.send(embed=helpers.LeaveLog(member))
 
 
 @client.event
 async def on_member_join(member):
-    # sends log on member join
+    """Логирует заходы пользователей на сервер"""
     channel = client.get_channel(settings.EDIT_NOTIFICATIONS_CHANNEL_ID)
     await channel.send(embed=helpers.JoinLog(member))
 
@@ -84,11 +84,11 @@ async def on_member_join(member):
 #     await guild.edit(banner=banner)
 
 
-@client.event
-async def on_member_join(member):
-    # sends log on member join
-    channel = client.get_channel(settings.EDIT_NOTIFICATIONS_CHANNEL_ID)
-    await channel.send(embed=helpers.JoinLog(member))
+# @client.event
+# async def on_member_join(member):
+#     """sends log on member join"""
+#     channel = client.get_channel(settings.EDIT_NOTIFICATIONS_CHANNEL_ID)
+#     await channel.send(embed=helpers.JoinLog(member))
 
 
 @client.event
