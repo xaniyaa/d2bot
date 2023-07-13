@@ -76,7 +76,7 @@ def log_delete(message) -> discord.Embed:
 def leave_log(member) -> discord.Embed:
     """returns embed for log of leaving members from channel"""
     embed = discord.Embed(
-        title="{} leaved channel at {}".format(str(member.name), kyiv_time()), color=discord.Color.from_rgb(0, 255, 0)
+        title="{} left channel at {}".format(str(member.name), kyiv_time()), color=discord.Color.from_rgb(0, 255, 0)
     )
     return embed
 
