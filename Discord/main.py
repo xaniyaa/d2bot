@@ -97,3 +97,4 @@ async def on_voice_state_update(member, before, after):
 
 if __name__ == "__main__":
     client.run(settings.DISCORD_API_TOKEN)
+    
