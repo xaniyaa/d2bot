@@ -1,14 +1,27 @@
 FROM python:3.10-slim
 
-RUN apt-get update
+# Configure Poetry
+ENV POETRY_HOME=/opt/poetry
+ENV POETRY_VENV=/opt/poetry-venv
+ENV POETRY_CACHE_DIR=/opt/.cache
 
-WORKDIR /code
+# Install poetry separated from system interpreter
+RUN python3 -m venv $POETRY_VENV \
+	&& $POETRY_VENV/bin/pip install -U pip setuptools \
+	&& $POETRY_VENV/bin/pip install poetry
 
-COPY poetry.lock poetry.lock
-COPY pyproject.toml pyproject.toml
-RUN pip install poetry
+# Add `poetry` to PATH
+ENV PATH="${PATH}:${POETRY_VENV}/bin"
+
+WORKDIR /app
+
+# Install dependencies
+COPY poetry.lock pyproject.toml .env ./
 RUN poetry install
 
-COPY Discord /code
+COPY Discord /app/Discord
+COPY config /app/config
 
-CMD ["python", "main.py"]
+ENV PYTHONPATH "${PYTHONPATH}:/app"
+
+CMD ["poetry", "run", "python", "Discord/main.py"]
