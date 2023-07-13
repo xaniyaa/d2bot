@@ -1,15 +1,15 @@
 import os
 from pathlib import Path
-from dotenv import load_dotenv, find_dotenv
+
+from dotenv import find_dotenv, load_dotenv
 
 load_dotenv(find_dotenv())
 
-SETTINGS_PATH = Path('settings.py')
-STATIC_PATH = SETTINGS_PATH.parent / '..' / 'static'
+SETTINGS_PATH = Path("settings.py")
+STATIC_PATH = SETTINGS_PATH.parent / ".." / "static"
 
-BANNER_FOLDER_ORIG = STATIC_PATH / 'orig.gif'
-BANNER_FOLDER_IMAGE = STATIC_PATH / 'image.gif'
-
+BANNER_FOLDER_ORIG = STATIC_PATH / "orig.gif"
+BANNER_FOLDER_IMAGE = STATIC_PATH / "image.gif"
 EDIT_NOTIFICATIONS_CHANNEL_ID = int(os.getenv("EDIT_NOTIFICATIONS_CHANNEL_ID"))
 BANNER_LOCATION = os.getenv("BANNER_LOCATION", BANNER_FOLDER_ORIG)
 EDITED_BANNER_LOCATION = os.getenv("EDITED_BANNER_LOCATION", BANNER_FOLDER_IMAGE)

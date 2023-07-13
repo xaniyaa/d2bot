@@ -12,5 +12,5 @@ def test_leave_log(mocked_kyiv_time):
 
     embed = leave_log(mocked_member)
 
-    assert embed.title == f'{mocked_member.name} left channel at {mocked_time}'
+    assert embed.title == f"{mocked_member.name} left channel at {mocked_time}"
     mocked_kyiv_time.assert_called_once()
