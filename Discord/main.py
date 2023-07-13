@@ -77,9 +77,10 @@ async def set_banner():
     # Every 20 seconds changes guild banner with current number of voice members
     # and members of channel
     guild = client.get_guild(settings.GUILD_ID)
-    helpers.gif_edit(settings.BANNER_LOCATION, settings.EDITED_BANNER_LOCATION, guild, settings.COORDINATES_X,
-                    settings.COORDINATES_Y)
-    with open(settings.EDITED_BANNER_LOCATION, 'rb') as file:
+    helpers.gif_edit(
+        settings.BANNER_LOCATION, settings.EDITED_BANNER_LOCATION, guild, settings.COORDINATES_X, settings.COORDINATES_Y
+    )
+    with open(settings.EDITED_BANNER_LOCATION, "rb") as file:
         banner = file.read()
     await guild.edit(banner=banner)
 
@@ -97,4 +98,3 @@ async def on_voice_state_update(member, before, after):
 
 if __name__ == "__main__":
     client.run(settings.DISCORD_API_TOKEN)
-    

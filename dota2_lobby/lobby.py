@@ -27,7 +27,6 @@ def create_practice_lobby():
     logging.info(dota.get_lobby_list())
 
 
-
 if __name__ == "__main__":
     logging.basicConfig(format="[%(asctime)s] %(levelname)s %(name)s: %(message)s", level=logging.DEBUG)
     dota.on("ready", create_practice_lobby)
