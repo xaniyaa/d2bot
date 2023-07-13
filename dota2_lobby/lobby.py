@@ -23,6 +23,9 @@ def create_practice_lobby():
         ),
     )
     dota.join_practice_lobby_broadcast_channel(channel=1)
+    dota.sleep(2)
+    logging.info(dota.get_lobby_list())
+
 
 
 if __name__ == "__main__":

@@ -8,7 +8,7 @@ from pytz import timezone
 import discord
 
 
-def Kyiv_time() -> str:
+def kyiv_time() -> str:
     """Возвращает форматированное UTC+3 время строкой"""
     kyiv = timezone("Europe/Kiev")
     kv_time = datetime.now(kyiv)
@@ -16,7 +16,7 @@ def Kyiv_time() -> str:
     return time_string
 
 
-def LogEdit(message_before: discord.Message, message_after: discord.Message) -> discord.Embed:
+def log_edit(message_before, message_after) -> discord.Embed:
     """Возвращает форматированный и заполненный discord.Embed"""
     embed = discord.Embed(
         title=f"{message_before.author} edited his message in {message_before.channel.name} channel",
@@ -28,32 +28,36 @@ def LogEdit(message_before: discord.Message, message_after: discord.Message) -> 
     ):  # adds pretty fields for small  embeds
         embed.add_field(name=message_before.content, value="This is the message before any edit", inline=True)
         embed.add_field(name=message_after.content, value="This is the message after the edit", inline=True)
-    embed.add_field(name="Time: ", value=Kyiv_time())
+    embed.add_field(name="Time: ", value=kyiv_time())
     return embed
 
 
-def LogTxtEdit(message_before: discord.Message, message_after: discord.Message):
+def log_txt_edit(message_before, message_after) -> BytesIO:
     """Создает txt файл для логирования edit message event"""
-    with open("message.txt", "w") as file:
-        file.write("{}\nWas changed to :\n{}".format(str(message_before.content), str(message_after.content)))
-    pass
+    message = message_before + "\nWas changed to:\n" + message_after
+    bytes_message = BytesIO()
+    bytes_message.write(str.encode(message))
+    bytes_message.seek(0)
+    return bytes_message
 
 
-def LogTxtDelete(message):
+def log_txt_delete(message) -> BytesIO:
     """Создает txt файл для логирования delete message event"""
-    with open("message.txt", "w") as file:
-        file.write("{}".format(str(message.content)))
-    pass
+    bytes_message = BytesIO()
+    bytes_message.write(str.encode(message))
+    bytes_message.seek(0)
+    return bytes_message
 
 
-def SplitEmbed() -> discord.Embed:
+def split_embed() -> discord.Embed:
     """for good-looking log"""
     embed = discord.Embed(title="-------------------------------------------------------")
     return embed
 
 
-def LogDelete(message: discord.Message) -> discord.Embed:
+def log_delete(message) -> discord.Embed:
     """returns embed for Delete log"""
+
     embed = discord.Embed(
         title="{} has deleted message in {} text channel".format(str(message.author.name), str(message.channel.name)),
         description="",
@@ -65,27 +69,27 @@ def LogDelete(message: discord.Message) -> discord.Embed:
             value="This is the message that he has deleted ",
             inline=True,
         )
-    embed.add_field(name="Time: ", value=Kyiv_time())
+    embed.add_field(name="Time: ", value=kyiv_time())
     return embed
 
 
-def LeaveLog(member) -> discord.Embed:
+def leave_log(member) -> discord.Embed:
     """returns embed for log of leaving members from channel"""
     embed = discord.Embed(
-        title="{} leaved channel at {}".format(str(member.name), Kyiv_time()), color=discord.Color.from_rgb(0, 255, 0)
+        title="{} leaved channel at {}".format(str(member.name), kyiv_time()), color=discord.Color.from_rgb(0, 255, 0)
     )
     return embed
 
 
-def JoinLog(member) -> discord.Embed:
+def join_log(member) -> discord.Embed:
     """returns embed for log of joining members from channel"""
     embed = discord.Embed(
-        title="{} joins channel at {}".format(str(member.name), Kyiv_time()), color=discord.Color.from_rgb(255, 255, 0)
+        title="{} joins channel at {}".format(str(member.name), kyiv_time()), color=discord.Color.from_rgb(255, 255, 0)
     )
     return embed
 
 
-def GifEditor(location, edited_location, guild):
+def gif_edit(location, edited_location, guild, x, y):
     """adds current voice members and current average members"""
     frames = []
     true_member_count = len([m for m in guild.members if not m.bot])  # without bots
@@ -98,12 +102,21 @@ def GifEditor(location, edited_location, guild):
     for frame in ImageSequence.Iterator(im):
         d = ImageDraw.Draw(frame)
         ttf = ImageFont.truetype("courbi.ttf", 20)
-        d.text((57, 150), str(voice_member_count), font=ttf)
-        d.text((57, 185), str(true_member_count), font=ttf)
+        d.text((x[0], y[0]), str(voice_member_count), font=ttf)
+        d.text((x[1], y[1]), str(true_member_count), font=ttf)
         del d
         b = BytesIO()
         frame.save(b, format="GIF")
         frame = Image.open(b)
         frames.append(frame)
     frames[0].save(edited_location, format("gif"), save_all=True, append_images=frames[1:])
-    pass
+
+
+def on_mute_log(member) -> discord.Embed:
+    embed = discord.Embed(title="{} has been muted at {}".format(member, kyiv_time()))
+    return embed
+
+
+def on_unmute_log(member) -> discord.Embed:
+    embed = discord.Embed(title="{} has been unmuted at {}".format(member, kyiv_time()))
+    return embed
